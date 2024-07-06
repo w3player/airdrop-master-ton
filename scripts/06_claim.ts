@@ -1,14 +1,11 @@
-import { Address, toNano } from '@ton/core';
+import { Address, Cell, toNano } from '@ton/core';
 import { AirdropMaster } from '../wrappers/AirdropMaster';
 import { NetworkProvider } from '@ton/blueprint';
-import { buildMerkleTreeWithItems } from '../tests/helper';
+import { buildMerkleTreeWithItems, getClaimProof } from '../tests/helper';
 import { demoData } from './00_demoData';
 
 export async function run(provider: NetworkProvider) {
     const aidropMaster = provider.open(AirdropMaster.fromAddress(Address.parse(demoData.airdropContract)));
-
-    const settings = await aidropMaster.getAirdropSettings();
-    console.log('current settings', settings);
 
     const merkleResult = buildMerkleTreeWithItems(
         demoData.recipients.map((x, idx) => {
@@ -21,18 +18,16 @@ export async function run(provider: NetworkProvider) {
         }),
     );
 
-    await aidropMaster.send(
+    const claimInfo = getClaimProof(merkleResult.dictCellBoc, 1);
+
+    const result = await aidropMaster.send(
         provider.sender(),
         { value: toNano('0.1') },
         {
-            $$type: 'SetBaseParams',
-            args: {
-                $$type: 'AirdropSettings',
-                startTime: 1720165203n,
-                endTime: 1730165203n,
-                tokenAddress: Address.parse(demoData.jetton),
-                merkleRoot: merkleResult.merkleRoot,
-            },
+            $$type: 'Claim',
+            queryId: 0n,
+            proof: Cell.fromBase64(claimInfo.proofBoc),
+            index: 1n,
         },
     );
 }

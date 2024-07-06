@@ -6,7 +6,7 @@ import { demoData } from './00_demoData';
 export async function run(provider: NetworkProvider) {
     const airdropMaster = provider.open(AirdropMaster.fromAddress(Address.parse(demoData.airdropContract)));
 
-    const [settings, balance, owner, stoppted, version] = await Promise.all([
+    const [settings, balance, owner, stopped, version] = await Promise.all([
         airdropMaster.getAirdropSettings(),
         airdropMaster.getBalance(),
         airdropMaster.getOwner(),
@@ -18,7 +18,7 @@ export async function run(provider: NetworkProvider) {
         settings,
         balance,
         owner,
-        stoppted,
+        stopped,
         version,
     };
 
