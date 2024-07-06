@@ -4,7 +4,9 @@
     "scripts": {
         "start": "blueprint run",
         "build": "blueprint build",
-        "test": "jest --verbose"
+        "test": "jest --verbose",
+        "tr": "pnpm build AirdropMaster && pnpm test AirdropMaster",
+        "b": "blueprint"
     },
     "devDependencies": {
         "@ton/blueprint": "^0.21.0",
