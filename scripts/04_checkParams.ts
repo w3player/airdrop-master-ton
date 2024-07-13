@@ -20,10 +20,8 @@ export async function run(provider: NetworkProvider) {
         owner,
         stopped,
         version,
+        contractAddress: airdropMaster.address,
     };
 
     console.log(data);
-
-    const myTokenWalletAddress = await airdropMaster.getMyTokenWalletAddress();
-    console.log(myTokenWalletAddress);
 }

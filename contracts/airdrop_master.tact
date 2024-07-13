@@ -2,21 +2,12 @@ import "@stdlib/deploy";
 import "@stdlib/ownable";
 import "@stdlib/stoppable";
 import "./helper.fc";
-import "./jetton/jetton.tact";
 import "./utils.tact";
 struct AirdropSettings {
     startTime: Int as uint32;
     endTime: Int as uint32;
     merkleRoot: Int as uint256;
-    tokenAddress: Address? = null;
-}
-message SetBaseParams {
-    args: AirdropSettings;
-}
-message Claim {
-    queryId: Int as uint64;
-    proof: Cell;
-    index: Int;
+    tokenWallatAddress: Address? = null;
 }
 struct ClaimEntry {
     index: Int as uint8;
@@ -41,7 +32,7 @@ contract AirdropMaster with Deployable, OwnableTransferable, Stoppable, Resumabl
     init(){
         self.owner = sender();
         // init biz vars
-        self.airdropSettings = AirdropSettings{startTime: 0, endTime: 0, merkleRoot: 0, tokenAddress: null};
+        self.airdropSettings = AirdropSettings{startTime: 0, endTime: 0, merkleRoot: 0, tokenWallatAddress: null};
     }
 
     fun onlyOwner() {
@@ -70,12 +61,6 @@ contract AirdropMaster with Deployable, OwnableTransferable, Stoppable, Resumabl
 
     get fun balanceString(): String {
         return myBalance().toCoinsString();
-    }
-
-    get fun myTokenWalletAddress(): Address {
-        let init: StateInit = initOf JettonDefaultWallet(self.airdropSettings.tokenAddress!!, myAddress());
-        let myJettonWalletAddress: Address = contractAddress(init);
-        return myJettonWalletAddress;
     }
 
     get fun claimed(index: Int): Bool {
@@ -129,26 +114,7 @@ contract AirdropMaster with Deployable, OwnableTransferable, Stoppable, Resumabl
         require(now() > claimableTimestamp, "Invalid claim amount");
         // send jetton
         self.claimed.set(msg.index, true);
-        self.sendJetton(msg.queryId, self.airdropSettings.tokenAddress!!, walletAddress, claimableAmount);
-        // let init: StateInit = initOf JettonDefaultWallet(self.airdropSettings.tokenAddress!!, myAddress());
-        // let contractJettonWalletAddress: Address = contractAddress(init);
-        // // send token
-        // let params: SendParameters = SendParameters{
-        //     to: contractJettonWalletAddress,
-        //     value: 0,
-        //     mode: SendRemainingValue,
-        //     bounce: false,
-        //     body: TokenTransfer{
-        //         queryId: msg.queryId,
-        //         amount: claimableAmount,
-        //         destination: walletAddress,
-        //         response_destination: walletAddress,
-        //         custom_payload: null,
-        //         forward_ton_amount: 0,
-        //         forward_payload: emptyCell().asSlice()
-        //     }.toCell()
-        // };
-        // send(params);
+        self.sendJetton(msg.queryId, self.airdropSettings.tokenWallatAddress!!, walletAddress, claimableAmount);
     }
 
     //   withdraw TON
@@ -158,8 +124,9 @@ contract AirdropMaster with Deployable, OwnableTransferable, Stoppable, Resumabl
         send(params);
     }
 
-    receive("withdrawToken"){
+    receive(msg: WithdrawToken){
         self.requireOwner();
+        self.sendJetton(msg.queryId, self.airdropSettings.tokenWallatAddress!!, sender(), msg.amount);
         // let params: SendParameters = SendParameters{to: sender(), value: 0, mode: SendRemainingBalance};
     }
 
@@ -168,4 +135,16 @@ contract AirdropMaster with Deployable, OwnableTransferable, Stoppable, Resumabl
         // https://docs.tact-lang.org/ref/core-advanced#nativereserve
         nativeReserve(ctx.value, ReserveAllExcept);
     }
+}
+message SetBaseParams {
+    args: AirdropSettings;
+}
+message Claim {
+    queryId: Int as uint64;
+    proof: Cell;
+    index: Int;
+}
+message WithdrawToken {
+    queryId: Int as uint64;
+    amount: Int as coins;
 }

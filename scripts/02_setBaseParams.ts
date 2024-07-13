@@ -1,7 +1,7 @@
 import { Address, toNano } from '@ton/core';
 import { AirdropMaster } from '../wrappers/AirdropMaster';
 import { NetworkProvider } from '@ton/blueprint';
-import { buildMerkleTreeWithItems } from '../tests/helper';
+import { buildMerkleTreeWithItems, getJettonWalletAddress } from '../tests/helper';
 import { demoData } from './00_demoData';
 
 export async function run(provider: NetworkProvider) {
@@ -21,6 +21,12 @@ export async function run(provider: NetworkProvider) {
         }),
     );
 
+    const airdropJettonWalletAddress = await getJettonWalletAddress(
+        provider.network() as 'mainnet' | 'testnet',
+        demoData.jetton,
+        demoData.airdropContract,
+    );
+
     await aidropMaster.send(
         provider.sender(),
         { value: toNano('0.1') },
@@ -30,7 +36,7 @@ export async function run(provider: NetworkProvider) {
                 $$type: 'AirdropSettings',
                 startTime: 1720165203n,
                 endTime: 1730165203n,
-                tokenAddress: Address.parse(demoData.jetton),
+                tokenWallatAddress: airdropJettonWalletAddress,
                 merkleRoot: merkleResult.merkleRoot,
             },
         },

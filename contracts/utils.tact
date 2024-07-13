@@ -1,9 +1,8 @@
-import "./jetton/jetton.tact";
 trait AidropUtils {
-    fun sendJetton(queryId: Int, jettonMasterAddress: Address, to: Address, amount: Int) {
+    fun sendJetton(queryId: Int, jettonWalletAddress: Address, to: Address, amount: Int) {
         // get contract's jetton wallet address
-        let init: StateInit = initOf JettonDefaultWallet(jettonMasterAddress, myAddress());
-        let jettonWalletAddress: Address = contractAddress(init);
+        // let init: StateInit = initOf JettonDefaultWallet(jettonMasterAddress, myAddress());
+        // let jettonWalletAddress: Address = contractAddress(init);
         // send jetton
         let params: SendParameters = SendParameters{
             to: jettonWalletAddress,

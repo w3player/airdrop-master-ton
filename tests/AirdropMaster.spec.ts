@@ -27,8 +27,6 @@ describe('AidropMaster', () => {
             },
         );
 
-        const airdropMasterAddress = await aidropMaster.address;
-
         expect(deployResult.transactions).toHaveTransaction({
             from: deployer.address,
             to: aidropMaster.address,
@@ -61,7 +59,7 @@ describe('AidropMaster', () => {
                 $$type: 'SetBaseParams',
                 args: {
                     $$type: 'AirdropSettings',
-                    tokenAddress: null,
+                    tokenWallatAddress: null,
                     startTime: BigInt(0),
                     endTime: 0n,
                     merkleRoot: 0n,
@@ -84,7 +82,7 @@ describe('AidropMaster', () => {
 
         // test airdrop settings
         const settings = await aidropMaster.getAirdropSettings();
-        expect(settings.tokenAddress).toBe(null);
+        expect(settings.tokenWallatAddress).toBe(null);
         expect(settings.startTime).toEqual(BigInt(0));
         expect(settings.endTime).toEqual(0n);
         expect(settings.merkleRoot).toEqual(0n);
@@ -102,7 +100,7 @@ describe('AidropMaster', () => {
                 $$type: 'SetBaseParams',
                 args: {
                     $$type: 'AirdropSettings',
-                    tokenAddress: deployer.address,
+                    tokenWallatAddress: deployer.address,
                     startTime: BigInt(0),
                     endTime: 10n,
                     merkleRoot: 0n,
@@ -145,7 +143,7 @@ describe('AidropMaster', () => {
                 $$type: 'SetBaseParams',
                 args: {
                     $$type: 'AirdropSettings',
-                    tokenAddress: null,
+                    tokenWallatAddress: null,
                     startTime: BigInt(0),
                     endTime: 0n,
                     merkleRoot: merkleTreeResult.merkleRoot,
@@ -183,7 +181,7 @@ describe('AidropMaster', () => {
                 $$type: 'SetBaseParams',
                 args: {
                     $$type: 'AirdropSettings',
-                    tokenAddress: null,
+                    tokenWallatAddress: null,
                     startTime: BigInt(0),
                     endTime: 0n,
                     merkleRoot: merkleTreeResult.merkleRoot,
@@ -209,7 +207,7 @@ describe('AidropMaster', () => {
                 $$type: 'SetBaseParams',
                 args: {
                     $$type: 'AirdropSettings',
-                    tokenAddress: null,
+                    tokenWallatAddress: null,
                     startTime: BigInt(0),
                     endTime: 0n,
                     merkleRoot: merkleTreeResult.merkleRoot,

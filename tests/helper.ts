@@ -1,4 +1,5 @@
 import { Address, Builder, Cell, Dictionary, Slice, beginCell } from '@ton/core';
+import { JettonMaster, TonClient4 } from '@ton/ton';
 
 type TokenDistributorEntry = {
     index: number; // index in dict
@@ -83,4 +84,35 @@ export function getClaimProof(dictCellBoc: string, index: number) {
         proofHash: proof.hash().toString('hex'),
         proofBoc: proof.toBoc().toString('base64'),
     };
+}
+
+export function printAddress(address: Address) {
+    const result = {
+        testnet: {
+            bounceable: address.toString({ bounceable: true, testOnly: true }),
+            uq: address.toString({ bounceable: false, testOnly: true }),
+        },
+        mainnet: {
+            bounceable: address.toString({ bounceable: true }),
+            uq: address.toString({ bounceable: false }),
+        },
+    };
+    console.log(result);
+}
+
+export async function getJettonWalletAddress(env: 'testnet' | 'mainnet', tokenAddress: string, userAddress: string) {
+    const clientMap = {
+        testnet: new TonClient4({ endpoint: 'https://testnet-v4.tonhubapi.com', timeout: 5000 }),
+        mainnet: new TonClient4({ endpoint: 'https://mainnet-v4.tonhubapi.com', timeout: 5000 }),
+    };
+
+    const client = clientMap[env];
+
+    const masterAddress = Address.parse(tokenAddress);
+    const masterContract = JettonMaster.create(masterAddress);
+    const jettonWalletAddress = await masterContract.getWalletAddress(
+        client.provider(masterAddress),
+        Address.parse(userAddress),
+    );
+    return jettonWalletAddress;
 }
