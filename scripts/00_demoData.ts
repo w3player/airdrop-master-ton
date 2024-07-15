@@ -1,6 +1,8 @@
 export const demoData = {
     jetton: 'kQCa2efoPKIq7gdpcGZQliz5yxT566m9pKg_pOhH__G5KMCd',
-    airdropContract: 'EQDzPQaLCIwfPHF3xpOW5YV0fAHxYc4gxPWdegL9RlkT8YqR',
+
+    // https://testnet.tonviewer.com/EQDorI2ShfrbOOv_71lABSoF-45g5jnq4drzDTnawziTPPj2
+    airdropContract: 'EQDorI2ShfrbOOv_71lABSoF-45g5jnq4drzDTnawziTPPj2',
 
     // airdrop recipients
     recipients: [
