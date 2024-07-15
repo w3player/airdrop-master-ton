@@ -7,7 +7,7 @@ struct AirdropSettings {
     startTime: Int as uint32;
     endTime: Int as uint32;
     merkleRoot: Int as uint256;
-    tokenWallatAddress: Address? = null;
+    tokenWalletAddress: Address? = null;
 }
 struct ClaimEntry {
     index: Int as uint8;
@@ -32,7 +32,7 @@ contract AirdropMaster with Deployable, OwnableTransferable, Stoppable, Resumabl
     init(){
         self.owner = sender();
         // init biz vars
-        self.airdropSettings = AirdropSettings{startTime: 0, endTime: 0, merkleRoot: 0, tokenWallatAddress: null};
+        self.airdropSettings = AirdropSettings{startTime: 0, endTime: 0, merkleRoot: 0, tokenWalletAddress: null};
     }
 
     fun onlyOwner() {
@@ -114,7 +114,7 @@ contract AirdropMaster with Deployable, OwnableTransferable, Stoppable, Resumabl
         require(now() > claimableTimestamp, "Invalid claim amount");
         // send jetton
         self.claimed.set(msg.index, true);
-        self.sendJetton(msg.queryId, self.airdropSettings.tokenWallatAddress!!, walletAddress, claimableAmount);
+        self.sendJetton(msg.queryId, self.airdropSettings.tokenWalletAddress!!, walletAddress, claimableAmount);
     }
 
     //   withdraw TON
@@ -126,8 +126,7 @@ contract AirdropMaster with Deployable, OwnableTransferable, Stoppable, Resumabl
 
     receive(msg: WithdrawToken){
         self.requireOwner();
-        self.sendJetton(msg.queryId, self.airdropSettings.tokenWallatAddress!!, sender(), msg.amount);
-        // let params: SendParameters = SendParameters{to: sender(), value: 0, mode: SendRemainingBalance};
+        self.sendJetton(msg.queryId, self.airdropSettings.tokenWalletAddress!!, sender(), msg.amount);
     }
 
     receive(){

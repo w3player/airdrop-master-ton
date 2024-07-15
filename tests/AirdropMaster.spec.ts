@@ -59,7 +59,7 @@ describe('AidropMaster', () => {
                 $$type: 'SetBaseParams',
                 args: {
                     $$type: 'AirdropSettings',
-                    tokenWallatAddress: null,
+                    tokenWalletAddress: null,
                     startTime: BigInt(0),
                     endTime: 0n,
                     merkleRoot: 0n,
@@ -82,7 +82,7 @@ describe('AidropMaster', () => {
 
         // test airdrop settings
         const settings = await aidropMaster.getAirdropSettings();
-        expect(settings.tokenWallatAddress).toBe(null);
+        expect(settings.tokenWalletAddress).toBe(null);
         expect(settings.startTime).toEqual(BigInt(0));
         expect(settings.endTime).toEqual(0n);
         expect(settings.merkleRoot).toEqual(0n);
@@ -100,7 +100,7 @@ describe('AidropMaster', () => {
                 $$type: 'SetBaseParams',
                 args: {
                     $$type: 'AirdropSettings',
-                    tokenWallatAddress: deployer.address,
+                    tokenWalletAddress: deployer.address,
                     startTime: BigInt(0),
                     endTime: 10n,
                     merkleRoot: 0n,
@@ -143,7 +143,7 @@ describe('AidropMaster', () => {
                 $$type: 'SetBaseParams',
                 args: {
                     $$type: 'AirdropSettings',
-                    tokenWallatAddress: null,
+                    tokenWalletAddress: null,
                     startTime: BigInt(0),
                     endTime: 0n,
                     merkleRoot: merkleTreeResult.merkleRoot,
@@ -181,7 +181,7 @@ describe('AidropMaster', () => {
                 $$type: 'SetBaseParams',
                 args: {
                     $$type: 'AirdropSettings',
-                    tokenWallatAddress: null,
+                    tokenWalletAddress: null,
                     startTime: BigInt(0),
                     endTime: 0n,
                     merkleRoot: merkleTreeResult.merkleRoot,
@@ -207,7 +207,7 @@ describe('AidropMaster', () => {
                 $$type: 'SetBaseParams',
                 args: {
                     $$type: 'AirdropSettings',
-                    tokenWallatAddress: null,
+                    tokenWalletAddress: null,
                     startTime: BigInt(0),
                     endTime: 0n,
                     merkleRoot: merkleTreeResult.merkleRoot,

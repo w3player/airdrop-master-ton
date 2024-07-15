@@ -36,7 +36,7 @@ export async function run(provider: NetworkProvider) {
                 $$type: 'AirdropSettings',
                 startTime: 1720165203n,
                 endTime: 1730165203n,
-                tokenWallatAddress: airdropJettonWalletAddress,
+                tokenWalletAddress: airdropJettonWalletAddress,
                 merkleRoot: merkleResult.merkleRoot,
             },
         },

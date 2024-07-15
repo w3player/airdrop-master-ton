@@ -1,4 +1,4 @@
-import { Address, Builder, Cell, Dictionary, Slice, beginCell } from '@ton/core';
+import { Address, Builder, Cell, Dictionary, Slice, beginCell, toNano } from '@ton/core';
 import { JettonMaster, TonClient4 } from '@ton/ton';
 
 type TokenDistributorEntry = {
@@ -55,14 +55,14 @@ export function buildMerkleTree() {
     dict.set(0n, {
         index: 0,
         address: Address.parse('EQD4eA1SdQOivBbTczzElFmfiKu4SXNL4S29TReQwzzr_70k'),
-        claimableAmount: 1000n,
+        claimableAmount: toNano(1),
         claimableTimestamp: 1720074084,
     });
 
     dict.set(1n, {
         index: 1,
         address: Address.parse('EQD4eA1SdQOivBbTczzElFmfiKu4SXNL4S29TReQwzzr_70k'),
-        claimableAmount: 2000n,
+        claimableAmount: toNano(1),
         claimableTimestamp: 1720074084,
     });
 

@@ -39,7 +39,7 @@ export async function run(provider: NetworkProvider) {
     const jettonTransferBody = new TonWeb.boc.Cell();
     jettonTransferBody.bits.writeUint(0xf8a7ea5, 32); // jetton 转账的 opcode
     jettonTransferBody.bits.writeUint(0, 64); // query id
-    jettonTransferBody.bits.writeCoins(new TonWeb.utils.BN(toNano('1').toString())); // jetton 数量，数量 * 10^9
+    jettonTransferBody.bits.writeCoins(new TonWeb.utils.BN(2 * 10 ** 9)); // jetton 数量，数量 * 10^9
     jettonTransferBody.bits.writeAddress(toAddress);
     jettonTransferBody.bits.writeAddress(toAddress); // 响应目的地
     jettonTransferBody.bits.writeBit(false); // 无自定义有效载荷
