@@ -3,9 +3,9 @@ import { AirdropMaster } from '../wrappers/AirdropMaster';
 import { NetworkProvider } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider) {
-    const airdropMaster = provider.open(await AirdropMaster.fromInit());
+    const aidropMaster = provider.open(await AirdropMaster.fromInit());
 
-    await airdropMaster.send(
+    await aidropMaster.send(
         provider.sender(),
         {
             value: toNano('0.05'),
@@ -13,10 +13,10 @@ export async function run(provider: NetworkProvider) {
         {
             $$type: 'Deploy',
             queryId: 0n,
-        }
+        },
     );
 
-    await provider.waitForDeploy(airdropMaster.address);
+    await provider.waitForDeploy(aidropMaster.address);
 
-    // run methods on `airdropMaster`
+    console.log('Address', aidropMaster.address);
 }

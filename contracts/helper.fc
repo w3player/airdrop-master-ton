@@ -1,0 +1,14 @@
+(slice, int) begin_parse_exotic(cell c) asm "XCTOS";
+
+slice merkle_verify(cell proof_cell, int merkle_root, int index) method_id {
+    (slice cs, int exotic?) = proof_cell.begin_parse_exotic();
+    throw_unless(42, exotic?);
+    throw_unless(400, cs~load_uint(8) == 3);
+    throw_unless(401, merkle_root == cs~load_uint(256));
+
+    cell dict = cs~load_ref();
+    (slice entry, int found?) = dict.udict_get?(256, index);
+    throw_unless(404, found?);
+
+    return entry;
+}
