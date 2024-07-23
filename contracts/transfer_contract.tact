@@ -1,12 +1,18 @@
 import "@stdlib/deploy";
 import "@stdlib/ownable";
 
+import "./messages.tact";
+import "./utils.tact";
+
 struct SendTarget {
     to: Address;
     amount: Int as uint128;
 }
 
-contract TransferContract with Deployable, OwnableTransferable, {
+contract TransferContract with Deployable, OwnableTransferable, AidropUtils {
+
+    const MinTonForStorage: Int = ton("0.01"); // enough for 1 KB of storage for 2.5 years
+    
     owner: Address;
     jettonWalletAddress: Address?;
 
@@ -21,6 +27,7 @@ contract TransferContract with Deployable, OwnableTransferable, {
     receive(msg: SetJettonWalletAddress){
         self.requireOwner();
         self.jettonWalletAddress = msg.jettonWalletAddress;
+        self.reply(emptyCell());
     }
 
     // send a single transfer
@@ -50,6 +57,11 @@ contract TransferContract with Deployable, OwnableTransferable, {
         };
         send(params);
     }
+
+    receive(msg: Send2){
+        self.requireOwner();
+        self.sendJetton(msg.queryId, self.jettonWalletAddress!!, msg.to, msg.amount, sender(), msg.message);
+    }
 }
 
 message SetJettonWalletAddress {
@@ -63,12 +75,10 @@ message Send {
     message: String;
 }
 
-message(0xf8a7ea5) TokenTransfer {
+message Send2 {
     queryId: Int as uint64;
-    amount: Int as coins;
-    destination: Address;
-    response_destination: Address;
-    custom_payload: Cell?;
-    forward_ton_amount: Int as coins;
-    forward_payload: Slice as remaining; // Comment Text message when Transfer the jetton
+    to: Address;
+    amount: Int as uint128;
+    message: String;
 }
+

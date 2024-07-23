@@ -10,11 +10,11 @@ export async function run(provider: NetworkProvider) {
         provider.sender(),
         { value: toNano('0.1') },
         {
-            $$type: 'Send',
+            $$type: 'Send2',
             queryId: 0n,
-            amount: toNano('0.9'),
+            amount: toNano('0.1'),
             to: provider.sender().address!,
-            message: 'hello',
+            message: 'send2',
         },
     );
     console.log('Result', result);

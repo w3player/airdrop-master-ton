@@ -10,5 +10,5 @@ export const demoData = {
         '0QC9gEpl9dbcGAuAN0PMYI6X0JYj0fSOePPTGlT0CKkh4hAb', // jay
     ],
 
-    simpleContractAddress: 'EQA8vgoKQHkxVQaTkKbY6L2PdNEOzri6qiHzGjUwII4QWsTa',
+    simpleContractAddress: 'EQBXAIfLp5wKkq0OSN9mT23hQnnGS0mPOFgMnQltpanhgRd0',
 };
