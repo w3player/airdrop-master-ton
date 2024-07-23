@@ -2,6 +2,7 @@ import "@stdlib/deploy";
 import "@stdlib/ownable";
 import "@stdlib/stoppable";
 import "./helper.fc";
+import "./messages.tact";
 import "./utils.tact";
 struct AirdropSettings {
     startTime: Int as uint32;
@@ -114,19 +115,36 @@ contract AirdropMaster with Deployable, OwnableTransferable, Stoppable, Resumabl
         require(now() > claimableTimestamp, "Invalid claim amount");
         // send jetton
         self.claimed.set(msg.index, true);
-        self.sendJetton(msg.queryId, self.airdropSettings.tokenWalletAddress!!, walletAddress, claimableAmount);
+        self.sendJetton(msg.queryId,
+            self.airdropSettings.tokenWalletAddress!!,
+            walletAddress,
+            claimableAmount,
+            sender(),
+            "claim"
+        );
     }
 
     //   withdraw TON
     receive("withdraw"){
         self.requireOwner();
-        let params: SendParameters = SendParameters{to: sender(), value: 0, mode: SendRemainingBalance};
+        let params: SendParameters = SendParameters{
+            to: sender(),
+            bounce: true,
+            value: 0,
+            mode: (SendRemainingBalance + SendIgnoreErrors)
+        };
         send(params);
     }
 
     receive(msg: WithdrawToken){
         self.requireOwner();
-        self.sendJetton(msg.queryId, self.airdropSettings.tokenWalletAddress!!, sender(), msg.amount);
+        self.sendJetton(msg.queryId,
+            self.airdropSettings.tokenWalletAddress!!,
+            sender(),
+            msg.amount,
+            sender(),
+            "withdraw"
+        );
     }
 
     receive(){

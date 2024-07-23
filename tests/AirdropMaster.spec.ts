@@ -155,15 +155,8 @@ describe('AidropMaster', () => {
         // test airdrop settings
         const claimEntry = await aidropMaster.getCheckProof(Cell.fromBase64(result.proofBoc), 1n);
 
-        // dict.set(1n, {
-        //     index: 1,
-        //     address: Address.parse('EQD4eA1SdQOivBbTczzElFmfiKu4SXNL4S29TReQwzzr_70k'),
-        //     claimableAmount: 2000n,
-        //     claimableTimestamp: 1720074084,
-        // });
-
         expect(claimEntry.address.equals(Address.parse('EQD4eA1SdQOivBbTczzElFmfiKu4SXNL4S29TReQwzzr_70k'))).toBe(true);
-        expect(claimEntry.claimableAmount).toBe(2000n);
+        expect(claimEntry.claimableAmount).toBe(toNano(1));
         expect(claimEntry.claimableTimestamp).toBe(1720074084n);
         expect(claimEntry.index).toBe(1n);
     });
@@ -228,6 +221,8 @@ describe('AidropMaster', () => {
             },
         );
 
-        console.log(claimResult.events, claimResult.transactions);
+        // console.log(claimResult.transactions).((x: any) => ({ from: x.from, to: x.to, success: x.success })));
+
+        expect(claimResult.transactions.length).toBeGreaterThan(0);
     });
 });
